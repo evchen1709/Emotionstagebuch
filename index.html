@@ -25,9 +25,63 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
+    /* --- PRINT OPTIMIERUNG --- */
+    @media print {
+      body, html {
+        background: #fff !important;
+        color: #222 !important;
+        font-family: 'Heebo', Arial, sans-serif !important;
+      }
+      h1, h2, h3, h4, .heading {
+        color: #222 !important;
+        font-family: 'Caveat', cursive !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .toskana-green, .toskana-green-bg {
+        color: #008B8B !important;
+        background: none !important;
+      }
+      .gradient-header {
+        background: #fff !important;
+        color: #222 !important;
+      }
+      .entry-card, .card {
+        border-left: 4px solid #008B8B !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .emotion-chip {
+        background: #008B8B !important;
+        color: #fff !important;
+      }
+      .bg-blue-50, .bg-green-50, .bg-yellow-50, .bg-red-50, .bg-purple-50 {
+        background: #f5f5f5 !important;
+        color: #222 !important;
+      }
+      .bg-blue-200 { background: #b3e0f7 !important; color: #222 !important; }
+      .bg-green-200 { background: #b7e4c7 !important; color: #222 !important; }
+      .bg-yellow-200 { background: #ffe066 !important; color: #222 !important; }
+      .bg-purple-200 { background: #e0bbff !important; color: #222 !important; }
+      .bg-red-50 { background: #ffe5e5 !important; color: #222 !important; }
+      .bg-gray-200, .bg-gray-50 { background: #f0f0f0 !important; color: #222 !important; }
+      /* Buttons, Inputs, Navigation, Install-Hinweise etc. ausblenden */
+      button, input, select, textarea, .success-message, #btnInstall, #btnPDF, #btnPrint, #btnToggleAll, [onclick*="clearAllData"], .text-center.text-xs, .shadow.mb-4, .shadow.p-6.mb-8, .shadow.p-6 {
+        display: none !important;
+      }
+      /* Nur die Eintragsliste und Auswertung anzeigen */
+      #entriesList, #analysisSection, .entry-card, .card {
+        display: block !important;
+      }
+      /* Seitenränder für A4 */
+      @page { size: A4; margin: 16mm; }
+    }
     :root { color-scheme: light; }
     body { font-family: 'Heebo', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: linear-gradient(135deg, #f0f8f8 0%, #e0f2f2 100%); }
     h1, h2, h3, h4, .heading { font-family: 'Caveat', cursive; }
+    h1, h2, h3, h4, .heading { color: #222 !important; }
     .toskana-green { color: #008B8B; }
     .toskana-green-bg { background-color: #008B8B; }
     .gradient-header { background: linear-gradient(135deg, #008B8B 0%, #20B2AA 50%, #48D1CC 100%); }
@@ -37,6 +91,13 @@
     .success-message { position:fixed; top:20px; right:20px; background:#10B981; color:white; padding:12px 20px; border-radius:8px; z-index:1000; animation: slideIn .3s ease-out; }
     @keyframes slideIn { from{ transform:translateX(100%); opacity:0; } to{ transform:translateX(0); opacity:1; } }
     .card{ page-break-inside: avoid; break-inside: avoid; }
+    @media print {
+      h1, h2, h3, h4, .heading {
+        color: #222 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen p-5">
@@ -621,53 +682,48 @@
     }
 
     function buildDocumentHTMLForExport(selected, title, includeAnalysis = true) {
-      const analysisBlock = includeAnalysis ? buildAnalysisHTMLForPDF(entries) : '';
-      let html = `<!DOCTYPE html><html lang="de"><head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>${title}</title>
-        <style>
-          :root{color-scheme:light;}
-          body{font-family: Arial, sans-serif; background:#fff; margin:16px;}
-          .card{border-left:4px solid #008B8B; padding:10px 12px; margin:10px 0; background:#fff; border-radius:8px; page-break-inside: avoid; break-inside: avoid;}
-          .heading{color:#008B8B}
-          @page{size:A4;margin:16mm}
-        </style>
-      </head><body>
-        <div style="text-align:center; margin-bottom:8px; font-size:22px; color:#008B8B;">${title}</div>`;
-      if (analysisBlock) html += analysisBlock;
-      html += `<div style="margin-top:14px; border-top:1px solid #ccc; padding-top:10px;"><h2 class="heading">📔 Ausgewählte Einträge (${selected.length})</h2>`;
-      selected.forEach(entry => {
-        const d = new Date(entry.dateTime).toLocaleString('de-DE', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
-        const emotions = entry.emotions ? Object.entries(entry.emotions).map(([e,v]) => `${e}: ${v}/10`).join(' • ') : '—';
-        const activities = entry.activities && entry.activities.length ? entry.activities.join(', ') : '—';
-        const schoolEvents = entry.schoolEvents && entry.schoolEvents.length ? entry.schoolEvents.join(', ') : '—';
-        const meals = entry.meals && entry.meals.length ? entry.meals.join(', ') : '—';
-        const socialEvents = entry.socialEvents && entry.socialEvents.length ? entry.socialEvents.join(', ') : '—';
-        const coping = entry.copingStrategies && entry.copingStrategies.length ? entry.copingStrategies.join(', ') : '—';
-        const notes = entry.notes ? entry.notes : '—';
-
-        html += `
-          <div class="card">
-            <div class="heading" style="font-weight:700; margin-bottom:6px;">${d}</div>
-            <div class="heading" style="font-weight:700; margin-bottom:6px;">🌈 ${entry.mood}/10 | 😴 ${entry.sleep}/10 | ⚡ ${entry.energy}/10${((entry.schoolStress||0)>0 || (entry.socialStress||0)>0) ? ` | ${ (entry.schoolStress||0)>0 ? `📚 ${entry.schoolStress}/10` : '' }${ ((entry.schoolStress||0)>0 && (entry.socialStress||0)>0) ? ' • ' : '' }${ (entry.socialStress||0)>0 ? `😰 ${entry.socialStress}/10` : '' }` : ''}</div>
-            ${Object.keys(entry.emotions||{}).length ? `<div><strong>💟 Emotionen:</strong> ${emotions}</div>` : ''}
-            ${entry.activities && entry.activities.length ? `<div><strong>🎯 Aktivitäten:</strong> ${activities}</div>` : ''}
-            ${entry.schoolEvents && entry.schoolEvents.length ? `<div><strong>🏫 Schulerlebnisse:</strong> ${schoolEvents}</div>` : ''}
-            ${entry.meals && entry.meals.length ? `<div><strong>🥗 Mahlzeiten:</strong> ${meals}</div>` : ''}
-            ${entry.socialEvents && entry.socialEvents.length ? `<div><strong>👥 Soziale Ereignisse:</strong> ${socialEvents}</div>` : ''}
-            ${entry.copingStrategies && entry.copingStrategies.length ? `<div><strong>🛠️ Bewältigungsstrategien:</strong> ${coping}</div>` : ''}
-            ${ (entry.homework && entry.homework !== '') || (entry.bullying && entry.bullying !== 'Nein' && entry.bullying !== '') || (entry.water||0)>5 || (entry.nutrition||5)<4 || (entry.nutrition||5)>7 ? `<div><strong>📋 Besonderes:</strong> ${[
-                entry.homework ? `✏️ Hausaufgaben: ${entry.homework}` : null,
-                (entry.bullying && entry.bullying !== 'Nein' && entry.bullying !== '') ? `🎯 Mobbing: ${entry.bullying}` : null,
-                (entry.water||0) > 5 ? `💧 Wasser: ${entry.water} Gläser` : null,
-                ((entry.nutrition||5)<4 || (entry.nutrition||5)>7) ? `🍎 Ernährung: ${entry.nutrition}/10` : null
-              ].filter(Boolean).join(' | ')}</div>` : ''}
-            ${entry.notes && entry.notes.trim() ? `<div><strong>📝 Notizen:</strong> ${notes}</div>` : ''}
-          </div>`;
-      });
-      html += `</div><div style="margin-top:10px; font-size:10px; color:#666; text-align:center;">© Eva Tam – Emotionstagebuch (App).</div></body></html>`;
-      return html;
+      // Erzeuge ein echtes DOM-Element (DIV) für den Export
+      const container = document.createElement('div');
+      container.style.background = '#fff';
+      container.style.padding = '16px';
+      container.style.fontFamily = 'Arial, sans-serif';
+      container.innerHTML = `
+        <div style="text-align:center; margin-bottom:8px; font-size:22px; color:#222; font-family:'Caveat',cursive;">${title}</div>
+        ${includeAnalysis ? buildAnalysisHTMLForPDF(entries) : ''}
+        <div style="margin-top:14px; border-top:1px solid #ccc; padding-top:10px;">
+          <h2 class="heading" style="color:#222;">📔 Ausgewählte Einträge (${selected.length})</h2>
+          ${selected.map(entry => {
+            const d = new Date(entry.dateTime).toLocaleString('de-DE', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+            const emotions = entry.emotions ? Object.entries(entry.emotions).map(([e,v]) => `${e}: ${v}/10`).join(' • ') : '—';
+            const activities = entry.activities && entry.activities.length ? entry.activities.join(', ') : '—';
+            const schoolEvents = entry.schoolEvents && entry.schoolEvents.length ? entry.schoolEvents.join(', ') : '—';
+            const meals = entry.meals && entry.meals.length ? entry.meals.join(', ') : '—';
+            const socialEvents = entry.socialEvents && entry.socialEvents.length ? entry.socialEvents.join(', ') : '—';
+            const coping = entry.copingStrategies && entry.copingStrategies.length ? entry.copingStrategies.join(', ') : '—';
+            const notes = entry.notes ? entry.notes : '—';
+            return `
+              <div class="card" style="border-left:4px solid #008B8B; padding:10px 12px; margin:10px 0; background:#fff; border-radius:8px; page-break-inside: avoid; break-inside: avoid;">
+                <div class="heading" style="font-weight:700; margin-bottom:6px; color:#222;">${d}</div>
+                <div class="heading" style="font-weight:700; margin-bottom:6px; color:#222;">🌈 ${entry.mood}/10 | 😴 ${entry.sleep}/10 | ⚡ ${entry.energy}/10${((entry.schoolStress||0)>0 || (entry.socialStress||0)>0) ? ` | ${ (entry.schoolStress||0)>0 ? `📚 ${entry.schoolStress}/10` : '' }${ ((entry.schoolStress||0)>0 && (entry.socialStress||0)>0) ? ' • ' : '' }${ (entry.socialStress||0)>0 ? `😰 ${entry.socialStress}/10` : '' }` : ''}</div>
+                ${Object.keys(entry.emotions||{}).length ? `<div><strong>💟 Emotionen:</strong> ${emotions}</div>` : ''}
+                ${entry.activities && entry.activities.length ? `<div><strong>🎯 Aktivitäten:</strong> ${activities}</div>` : ''}
+                ${entry.schoolEvents && entry.schoolEvents.length ? `<div><strong>🏫 Schulerlebnisse:</strong> ${schoolEvents}</div>` : ''}
+                ${entry.meals && entry.meals.length ? `<div><strong>🥗 Mahlzeiten:</strong> ${meals}</div>` : ''}
+                ${entry.socialEvents && entry.socialEvents.length ? `<div><strong>👥 Soziale Ereignisse:</strong> ${socialEvents}</div>` : ''}
+                ${entry.copingStrategies && entry.copingStrategies.length ? `<div><strong>🛠️ Bewältigungsstrategien:</strong> ${coping}</div>` : ''}
+                ${ (entry.homework && entry.homework !== '') || (entry.bullying && entry.bullying !== 'Nein' && entry.bullying !== '') || (entry.water||0)>5 || (entry.nutrition||5)<4 || (entry.nutrition||5)>7 ? `<div><strong>📋 Besonderes:</strong> ${[
+                    entry.homework ? `✏️ Hausaufgaben: ${entry.homework}` : null,
+                    (entry.bullying && entry.bullying !== 'Nein' && entry.bullying !== '') ? `🎯 Mobbing: ${entry.bullying}` : null,
+                    (entry.water||0) > 5 ? `💧 Wasser: ${entry.water} Gläser` : null,
+                    ((entry.nutrition||5)<4 || (entry.nutrition||5)>7) ? `🍎 Ernährung: ${entry.nutrition}/10` : null
+                  ].filter(Boolean).join(' | ')}</div>` : ''}
+                ${entry.notes && entry.notes.trim() ? `<div><strong>📝 Notizen:</strong> ${notes}</div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+        <div style="margin-top:10px; font-size:10px; color:#666; text-align:center;">© Eva Tam – Emotionstagebuch (App).</div>
+      `;
+      return container;
     }
 
     async function exportSelectedEntriesPDF() {
@@ -678,34 +734,46 @@
       const singleMode = selected.length === 1 && document.querySelectorAll('.entry-checkbox:checked').length === 1;
       const title = singleMode ? `🧭 Emotionstagebuch — Eintrag — ${username ? username + ' — ' : ''}${today}` : `🧭 Emotionstagebuch — ${username ? username + ' — ' : ''}${today}`;
 
-      const fullHtml = buildDocumentHTMLForExport(selected, title, !singleMode);
-      const iframe = document.createElement('iframe');
-      Object.assign(iframe.style, { position:'fixed', right:'0', bottom:'0', width:'0', height:'0', border:'0' });
-      iframe.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(iframe);
+      // Sichtbarer Wrapper im Layout (visibility:hidden, nicht display:none)
+      const exportContent = buildDocumentHTMLForExport(selected, title, !singleMode);
+      exportContent.id = 'exportContent';
+      exportContent.style.position = 'absolute';
+      exportContent.style.left = '0';
+      exportContent.style.top = '0';
+      exportContent.style.width = '794px';
+      exportContent.style.maxWidth = '794px';
+      exportContent.style.background = '#fff';
+      exportContent.style.visibility = 'hidden';
+      exportContent.style.zIndex = '9999';
+      document.body.appendChild(exportContent);
 
-      const idoc = iframe.contentDocument || iframe.contentWindow.document;
-      idoc.open(); idoc.write(fullHtml); idoc.close();
-
-      try { if (idoc.fonts && idoc.fonts.ready) await idoc.fonts.ready; } catch(e){}
-      await new Promise(r => iframe.contentWindow.requestAnimationFrame(() => iframe.contentWindow.requestAnimationFrame(r)));
-      const rootEl = idoc.body || idoc.documentElement;
+      // Fonts abwarten
+      if (document.fonts && document.fonts.ready) {
+        try { await document.fonts.ready; } catch(e){}
+      }
+      // 2× requestAnimationFrame für Layout
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
       const opt = {
         margin: [10, 10, 14, 10],
         filename: `emotionstagebuch-${new Date().toISOString().split('T')[0]}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: Math.min(1.5, (window.devicePixelRatio || 1)), backgroundColor: '#ffffff' },
+        html2canvas: {
+          scale: 2,
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          windowWidth: 794
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['css', 'legacy'] }
       };
       try {
-        await html2pdf().set(opt).from(rootEl).save();
+        await html2pdf().set(opt).from(exportContent).save();
         showSuccessMessage('📄 PDF erstellt!');
       } catch (err) {
-        alert('❌ PDF konnte nicht erstellt werden.');
+        alert('❌ PDF konnte nicht erstellt werden.\nFehler: ' + (err && err.message ? err.message : err));
       } finally {
-        setTimeout(() => { try { iframe.remove(); } catch(e){} }, 500);
+        exportContent.remove();
       }
     }
 
