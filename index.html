@@ -304,7 +304,7 @@
           <span id="selectionInfo" class="text-sm text-gray-700">Auswahl: 0</span>
           <input type="text" id="printName" placeholder="Name (optional)" class="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm" style="width: 180px;">
           <button id="btnToggleAll" class="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600">☑️ Alle auswählen</button>
-          <!-- PDF-Button entfernt, da PDF-Export nicht zuverlässig funktioniert -->
+          <button id="btnPDF" class="bg-cyan-700 text-white px-3 py-2 rounded-lg text-sm hover:bg-cyan-900">📄 PDF</button>
           <button id="btnPrint" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-emerald-700">🖨️ Drucken / PDF</button>
           <button onclick="clearAllData()" class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600">🗑️ Alle löschen</button>
         </div>
@@ -372,9 +372,80 @@
 
       document.getElementById('moodForm').addEventListener('submit', function(e) { e.preventDefault(); saveEntry(); });
 
-      document.getElementById('btnToggleAll').addEventListener('click', toggleAllEntries);
-      document.getElementById('btnPDF').addEventListener('click', () => exportSelectedEntriesPDF());
-      document.getElementById('btnPrint').addEventListener('click', printSelectedEntries);
+  document.getElementById('btnToggleAll').addEventListener('click', toggleAllEntries);
+  document.getElementById('btnPDF').addEventListener('click', exportSelectedEntriesPDFUniversal);
+  document.getElementById('btnPrint').addEventListener('click', printSelectedEntries);
+    // PDF-Export-Button-Logik: iOS immer Druckdialog, sonst html2pdf mit Fallback
+    async function exportSelectedEntriesPDFUniversal() {
+      if (!entries || entries.length === 0) { alert('❌ Es gibt noch keine Einträge.'); return; }
+      const selected = getSelectedEntries();
+      const username = (document.getElementById('printName').value || '').trim();
+      const today = new Date().toLocaleDateString('de-DE');
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const singleMode = selected.length === 1 && document.querySelectorAll('.entry-checkbox:checked').length === 1;
+      const title = singleMode
+        ? `🧭 Emotionstracker — Eintrag — ${username ? username + ' — ' : ''}${today}`
+        : `🧭 Emotionstracker — ${username ? username + ' — ' : ''}${today}`;
+
+      if (isIOS) {
+        alert('Auf iPhone/iPad funktioniert der PDF-Export technisch nicht zuverlässig. Bitte nutze stattdessen den Druck-Button und wähle dort „Als PDF sichern“!');
+        await printSelectedEntries();
+        return;
+      }
+
+      // Export-HTML generieren (mit Webfonts)
+      const fullHtml = buildDocumentHTMLForExport(selected, title, !singleMode, { iosSafe: false });
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      iframe.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(iframe);
+
+      const idoc = iframe.contentDocument || iframe.contentWindow.document;
+      idoc.open();
+      idoc.write(fullHtml);
+      idoc.close();
+
+      try { if (idoc.fonts && idoc.fonts.ready) await idoc.fonts.ready; } catch(e){}
+      await new Promise(r => iframe.contentWindow.requestAnimationFrame(() => iframe.contentWindow.requestAnimationFrame(r)));
+      const rootEl = idoc.body || idoc.documentElement;
+      await new Promise(r => setTimeout(r, 30));
+
+      const opt = {
+        margin: [10, 10, 14, 10],
+        filename: `emotionstracker-${new Date().toISOString().split('T')[0]}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: Math.min(1.5, (window.devicePixelRatio || 1)),
+          foreignObjectRendering: false,
+          useCORS: false,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: Math.max(rootEl.scrollWidth, rootEl.clientWidth, 794),
+          windowHeight: Math.max(rootEl.scrollHeight, rootEl.clientHeight, 1123)
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+      };
+
+      try {
+        await html2pdf().set(opt).from(rootEl).save();
+        showSuccessMessage('📄 PDF erstellt! Du kannst es jetzt teilen.');
+      } catch (err) {
+        console.error('PDF-Fehler:', err);
+        const wantFallback = confirm('PDF-Export hat nicht geklappt. Möchtest du stattdessen den Druckdialog öffnen? Dort kannst du „Als PDF speichern“ wählen.');
+        if (wantFallback) { await printSelectedEntries(); }
+      } finally {
+        setTimeout(() => { try { iframe.remove(); } catch(e){} }, 500);
+      }
+    }
 
       document.addEventListener('change', (e) => {
         if (e.target && e.target.classList && e.target.classList.contains('entry-checkbox')) {
