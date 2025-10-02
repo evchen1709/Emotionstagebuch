@@ -92,6 +92,60 @@
     .card{ page-break-inside: avoid; break-inside: avoid; }
   </style>
 </head>
+  <style id="print-style">
+    @media print {
+      body, html {
+        background: #fff !important;
+        color: #222 !important;
+        font-family: 'Heebo', Arial, sans-serif !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+        margin: 0 !important;
+      }
+      h1, h2, h3, h4, .heading {
+        color: #222 !important;
+        font-family: 'Caveat', cursive !important;
+        font-weight: 700 !important;
+        font-size: 2.1em !important;
+        margin-top: 1.2em !important;
+        margin-bottom: 0.6em !important;
+        letter-spacing: 0.01em !important;
+        text-align: center !important;
+      }
+      .toskana-green, .toskana-green-bg, .gradient-header {
+        color: #222 !important;
+        background: none !important;
+      }
+      .emotion-chip {
+        background: #e0f7fa !important;
+        color: #222 !important;
+        border-radius: 18px !important;
+        font-family: 'Heebo', Arial, sans-serif !important;
+        font-size: 15px !important;
+        padding: 5px 16px !important;
+        margin: 4px 6px 4px 0 !important;
+        border: 1.5px solid #b2ebf2 !important;
+        box-shadow: 0 1px 4px #b2ebf2 !important;
+        display: inline-block !important;
+      }
+      .entry-card, .card {
+        border-left: 5px solid #b2dfdb !important;
+        background: #fff !important;
+        box-shadow: 0 2px 8px #e0e0e0 !important;
+        margin: 24px 0 !important;
+        padding: 20px 24px !important;
+        border-radius: 14px !important;
+      }
+      .text-center { text-align: center !important; }
+      .text-sm, .text-xs { font-size: 15px !important; }
+      /* Buttons und Steuerelemente ausblenden */
+      button, input, select, textarea, .success-message, #btnInstall, #btnPDF, #btnPrint, #btnToggleAll, [onclick*="clearAllData"] {
+        display: none !important;
+      }
+      /* Seitenränder für A4 */
+      @page { size: A4; margin: 16mm; }
+    }
+  </style>
 <body class="min-h-screen p-5">
   <div class="max-w-6xl mx-auto">
     <!-- INSTALL & INFO (App ONLY) -->
