@@ -92,6 +92,20 @@
     .card{ page-break-inside: avoid; break-inside: avoid; }
   </style>
 </head>
+  <style>
+    #mobile-print-hint {
+      display: none;
+      background: #fffbe6;
+      color: #333;
+      border: 2px solid #ffd700;
+      border-radius: 1em;
+      padding: 1.2em;
+      margin: 1.5em 1em 0 1em;
+      font-size: 1.1em;
+      box-shadow: 0 2px 8px #0001;
+      text-align: center;
+    }
+  </style>
   <style id="print-style">
     @media print {
       body, html {
@@ -147,6 +161,10 @@
     }
   </style>
 <body class="min-h-screen p-5">
+  <div id="mobile-print-hint">
+    <b>So kannst du dein Tagebuch teilen oder drucken:</b><br>
+    <span style="font-size:1.1em;">Tippe auf das <b>Teilen-Symbol</b> (<span style='font-size:1.3em;'>⤴️</span> oder <span style='font-size:1.3em;'>…</span>)<br>und wähle <b>„Drucken“</b> oder <b>„Als PDF sichern“</b>.<br>Du kannst es dann per Mail oder WhatsApp verschicken!</span>
+  </div>
   <div class="max-w-6xl mx-auto">
     <!-- INSTALL & INFO (App ONLY) -->
     <div class="bg-white rounded-lg shadow mb-4 p-4 flex items-start gap-3">
@@ -403,6 +421,20 @@
   </div>
 
   <script src="/install.js"></script>
+  <script>
+    // Erkennung: Läuft die App als PWA (Standalone) oder auf Mobilgerät?
+    function showMobilePrintHint() {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+      if (isStandalone || isMobile) {
+        document.getElementById('mobile-print-hint').style.display = 'block';
+        // Druck-Button ausblenden
+        const btnPrint = document.getElementById('btnPrint');
+        if (btnPrint) btnPrint.style.display = 'none';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', showMobilePrintHint);
+  </script>
   <script>
     function safeGetLocalStorage(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch(e){ return fallback; } }
     function safeSetLocalStorage(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch(e){ console.warn('localStorage nicht verfügbar:', e); return false; } }
