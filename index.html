@@ -38,43 +38,9 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .toskana-green, .toskana-green-bg {
-        color: #008B8B !important;
-        background: none !important;
-      }
-      .gradient-header, .bg-white, .shadow, .rounded-lg {
-        background: #fff !important;
-        color: #222 !important;
-        box-shadow: none !important;
-      }
-      .entry-card, .card {
-        border-left: 4px solid #008B8B !important;
-        background: #fff !important;
-        box-shadow: none !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .emotion-chip {
-        background: #008B8B !important;
-        color: #fff !important;
-      }
-      .bg-blue-50, .bg-green-50, .bg-yellow-50, .bg-red-50, .bg-purple-50 {
-        background: #f5f5f5 !important;
-        color: #222 !important;
-      }
-      .bg-blue-200 { background: #b3e0f7 !important; color: #222 !important; }
-      .bg-green-200 { background: #b7e4c7 !important; color: #222 !important; }
-      .bg-yellow-200 { background: #ffe066 !important; color: #222 !important; }
-      .bg-purple-200 { background: #e0bbff !important; color: #222 !important; }
-      .bg-red-50 { background: #ffe5e5 !important; color: #222 !important; }
-      .bg-gray-200, .bg-gray-50 { background: #f0f0f0 !important; color: #222 !important; }
-      /* Buttons, Inputs, Navigation, Install-Hinweise etc. ausblenden */
-      button, input, select, textarea, .success-message, #btnInstall, #btnPDF, #btnPrint, #btnToggleAll, [onclick*="clearAllData"], .text-center.text-xs, .shadow.mb-4, .shadow.p-6.mb-8 {
+      /* Nur Steuerelemente ausblenden */
+      button, input, select, textarea, .success-message, #btnInstall, #btnPDF, #btnPrint, #btnToggleAll, [onclick*="clearAllData"] {
         display: none !important;
-      }
-      /* Nur die Eintragsliste und Auswertung anzeigen */
-      #entriesList, #analysisSection, .entry-card, .card {
-        display: block !important;
       }
       /* Seitenränder für A4 */
       @page { size: A4; margin: 16mm; }
