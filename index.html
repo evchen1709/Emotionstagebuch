@@ -416,20 +416,24 @@
       const rootEl = idoc.body || idoc.documentElement;
       await new Promise(r => setTimeout(r, 30));
 
+      // Optimale Breite/Höhe für A4 Hochformat (794x1123px @96dpi)
+      const a4WidthPx = 794;
+      const a4HeightPx = 1123;
+      // Skaliere so, dass alles auf eine Seite passt (bei mehreren Seiten: pagebreak)
       const opt = {
         margin: [10, 10, 14, 10],
         filename: `emotionstracker-${new Date().toISOString().split('T')[0]}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
-          scale: Math.min(1.5, (window.devicePixelRatio || 1)),
+          scale: 2, // Höhere Auflösung für bessere Lesbarkeit
           foreignObjectRendering: false,
           useCORS: false,
           allowTaint: true,
           backgroundColor: '#ffffff',
           scrollX: 0,
           scrollY: 0,
-          windowWidth: Math.max(rootEl.scrollWidth, rootEl.clientWidth, 794),
-          windowHeight: Math.max(rootEl.scrollHeight, rootEl.clientHeight, 1123)
+          windowWidth: a4WidthPx,
+          windowHeight: Math.max(rootEl.scrollHeight, a4HeightPx)
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['css', 'legacy'] }
