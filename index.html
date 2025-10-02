@@ -304,12 +304,15 @@
           <span id="selectionInfo" class="text-sm text-gray-700">Auswahl: 0</span>
           <input type="text" id="printName" placeholder="Name (optional)" class="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm" style="width: 180px;">
           <button id="btnToggleAll" class="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600">☑️ Alle auswählen</button>
-          <button id="btnPDF" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-700">📄 PDF</button>
-          <button id="btnPrint" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-emerald-700">🖨️ Drucken</button>
+          <!-- PDF-Button entfernt, da PDF-Export nicht zuverlässig funktioniert -->
+          <button id="btnPrint" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-emerald-700">🖨️ Drucken / PDF</button>
           <button onclick="clearAllData()" class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600">🗑️ Alle löschen</button>
         </div>
       </div>
       <div id="entriesList"><p class="text-gray-500 text-center py-6">Noch keine Einträge vorhanden. Erstelle deinen ersten Eintrag oben!</p></div>
+      <div class="w-full mt-4 text-sm text-blue-700 bg-blue-50 rounded p-2 text-center">
+        <strong>PDF teilen?</strong> Klicke auf <b>Drucken / PDF</b> und wähle <b>„Als PDF speichern“</b>. Das PDF kannst du dann per WhatsApp oder E-Mail verschicken.
+      </div>
       <div class="text-center text-xs text-gray-600 mt-6 mb-2">© Eva Tam – Emotionstagebuch (App). Private Nutzung erlaubt. Kommerzielle Nutzung nur mit schriftlicher Erlaubnis.</div>
     </div>
   </div>
@@ -735,6 +738,7 @@
 
     async function printSelectedEntries() {
       if (!entries || entries.length === 0) { alert('❌ Es gibt noch keine Einträge.'); return; }
+      alert('PDF teilen? Klicke im Druckdialog auf „Als PDF speichern“. Das PDF kannst du dann per WhatsApp oder E-Mail verschicken.');
       const selected = getSelectedEntries();
       const username = (document.getElementById('printName').value || '').trim();
       const today = new Date().toLocaleDateString('de-DE');
