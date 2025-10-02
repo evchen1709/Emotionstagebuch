@@ -351,21 +351,12 @@
         const slider = document.getElementById('emotionSlider');
         if (this.value) {
           slider.disabled = false;
-          // Wenn vorher eine andere Emotion gewählt war, Wert übernehmen
-          if (slider.value > 0) {
-            const prevEmotion = slider.getAttribute('data-prev-emotion');
-            if (prevEmotion) {
-              currentEmotions[prevEmotion] = parseInt(slider.value);
-            }
-          }
           slider.value = currentEmotions[this.value] || 0;
           document.getElementById('emotionSliderValue').textContent = slider.value;
-          slider.setAttribute('data-prev-emotion', this.value);
         } else {
           slider.disabled = true;
           slider.value = 0;
           document.getElementById('emotionSliderValue').textContent = '0';
-          slider.removeAttribute('data-prev-emotion');
         }
         updateEmotionChips();
       });
