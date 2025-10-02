@@ -361,7 +361,7 @@
       });
 
       document.getElementById('emotionSlider').addEventListener('input', function() {
-        const selectedEmotion = document.getElementById
+        const selectedEmotion = document.getElementById('emotionSelect').value;
         document.getElementById('emotionSliderValue').textContent = this.value;
         if (selectedEmotion) {
           if (this.value > 0) { currentEmotions[selectedEmotion] = parseInt(this.value); } else { delete currentEmotions[selectedEmotion]; }
