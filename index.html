@@ -418,7 +418,7 @@
         </div>
         <div class="flex flex-wrap items-center gap-2">
           <span id="selectionInfo" class="text-sm text-gray-700">Auswahl: 0</span>
-          <input type="text" id="printName" placeholder="Name (optional)" class="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm" style="width: 180px;">
+          <!-- Namensfeld für Druck entfernt, Name wird automatisch übernommen -->
           <button id="btnToggleAll" class="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600">☑️ Alle auswählen</button>
           <button id="btnPrint" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-emerald-700">🖨️ Drucken / PDF</button>
           <button onclick="clearAllData()" class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600">🗑️ Alle löschen</button>
@@ -883,7 +883,7 @@
     async function exportSelectedEntriesPDF() {
       if (!entries || entries.length === 0) { alert('❌ Es gibt noch keine Einträge.'); return; }
       const selected = getSelectedEntries();
-      const username = (document.getElementById('printName').value || '').trim();
+  const username = (localStorage.getItem('trackerName') || '').trim();
       const today = new Date().toLocaleDateString('de-DE');
       const singleMode = selected.length === 1 && document.querySelectorAll('.entry-checkbox:checked').length === 1;
       const title = singleMode ? `🧭 Emotionstagebuch — Eintrag — ${username ? username + ' — ' : ''}${today}` : `🧭 Emotionstagebuch — ${username ? username + ' — ' : ''}${today}`;
@@ -923,7 +923,7 @@
       if (!entries || entries.length === 0) { alert('❌ Es gibt noch keine Einträge.'); return; }
       alert('PDF teilen? Klicke im Druckdialog auf „Als PDF speichern“. Das PDF kannst du dann per WhatsApp oder E-Mail verschicken.');
       const selected = getSelectedEntries();
-      const username = (document.getElementById('printName').value || '').trim();
+  const username = (localStorage.getItem('trackerName') || '').trim();
       const today = new Date().toLocaleDateString('de-DE');
       const singleMode = selected.length === 1 && document.querySelectorAll('.entry-checkbox:checked').length === 1;
       const title = singleMode ? `🧭 Emotionstagebuch — Eintrag — ${username ? username + ' — ' : ''}${today}` : `🧭 Emotionstagebuch — ${username ? username + ' — ' : ''}${today}`;
