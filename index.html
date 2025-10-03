@@ -162,19 +162,32 @@
 <body class="min-h-screen p-5">
   <!-- mobile-print-hint entfernt -->
   <div class="max-w-6xl mx-auto">
-    <!-- INSTALL & INFO (App ONLY) -->
-    <div class="bg-white rounded-lg shadow mb-4 p-4 flex items-start gap-3">
-      <img src="/icons/icon-192.png" alt="App-Icon" class="w-12 h-12 rounded-lg"/>
-      <div class="text-sm leading-relaxed">
-        <div class="font-semibold text-gray-800 flex items-center gap-2"><span class="text-xl">😊</span> Emotionstagebuch – App</div>
-        <ul class="list-disc ml-5 mt-1">
+    <!-- Info-Button mit Popup -->
+    <div class="flex justify-end mb-2">
+      <button id="infoBtn" aria-label="Info" class="bg-cyan-600 hover:bg-cyan-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg text-2xl" style="outline:none;">
+        ℹ️
+      </button>
+    </div>
+    <div id="infoModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+      <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fadeIn">
+        <button id="closeInfo" class="absolute top-2 right-2 text-gray-500 hover:text-cyan-700 text-2xl font-bold" aria-label="Schließen">×</button>
+        <div class="flex items-center gap-3 mb-2">
+          <img src="/icons/icon-192.png" alt="App-Icon" class="w-10 h-10 rounded-lg"/>
+          <span class="font-semibold text-gray-800 text-lg">Emotionstagebuch – App</span>
+        </div>
+        <ul class="list-disc ml-5 text-sm leading-relaxed">
           <li><span class="font-medium">Installation iPhone/iPad:</span> In Safari „Teilen“ → <em>Zum Home-Bildschirm</em>. Danach startet die App im Vollbild & funktioniert offline.</li>
-          <li><span class="font-medium">Installation Android:</span> In Chrome oben rechts „App installieren“ oder unten auf <button id="btnInstall" hidden class="px-2 py-1 bg-emerald-600 text-white rounded">Installieren</button> tippen.</li>
+          <li><span class="font-medium">Installation Android:</span> In Chrome oben rechts „App installieren“ oder unten auf <span class="inline-block bg-emerald-600 text-white rounded px-2 py-1">Installieren</span> tippen.</li>
           <li><span class="font-medium">Speichern & Löschen:</span> Deine Einträge bleiben lokal auf diesem Gerät. In der Liste unten kannst du einzelne Einträge löschen oder alle entfernen.</li>
           <li><span class="font-medium">Teilen/Drucken:</span> Über die Buttons „Drucken“ (Auswahl/Alle).</li>
         </ul>
       </div>
     </div>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.2s; }
 
     <!-- HEADER -->
     <div class="gradient-header text-white p-8 rounded-lg text-center mb-6">
@@ -418,6 +431,25 @@
   </div>
 
   <script src="/install.js"></script>
+  <script>
+    // Info-Button Popup-Logik
+    document.addEventListener('DOMContentLoaded', function() {
+      var infoBtn = document.getElementById('infoBtn');
+      var infoModal = document.getElementById('infoModal');
+      var closeInfo = document.getElementById('closeInfo');
+      if(infoBtn && infoModal && closeInfo) {
+        infoBtn.addEventListener('click', function() {
+          infoModal.classList.remove('hidden');
+        });
+        closeInfo.addEventListener('click', function() {
+          infoModal.classList.add('hidden');
+        });
+        infoModal.addEventListener('click', function(e) {
+          if(e.target === infoModal) infoModal.classList.add('hidden');
+        });
+      }
+    });
+  </script>
   <!-- mobile-print-hint-Logik entfernt -->
   <script>
     function safeGetLocalStorage(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch(e){ return fallback; } }
