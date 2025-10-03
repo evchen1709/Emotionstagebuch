@@ -852,11 +852,11 @@
 
       return `
         <div style="margin-top:10px;border-top:1px solid #ccc;padding-top:12px;">
-          <h2 style="font-family:'Caveat',cursive;color:#008B8B;margin:0 0 8px;">📈 Auswertung & Trends</h2>
+          <h2 style="font-family:'Caveat',cursive;color:#008B8B;margin:0 0 8px;font-size:2em;">📈 Auswertung & Trends</h2>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
-            <div style="background:#eef6ff;padding:12px;border-radius:10px;">
-              <div style="font-weight:700;color:#008B8B;margin-bottom:6px;">📊 Durchschnittswerte</div>
-              <div style="font-size:12px;line-height:1.6">
+            <div style="background:#eef6ff;padding:14px 14px 10px 14px;border-radius:12px;">
+              <div style="font-weight:700;color:#008B8B;margin-bottom:6px;font-size:1.15em;">📊 Durchschnittswerte</div>
+              <div style="font-size:1.1em;line-height:1.6">
                 <div>🌈 Stimmung: <strong>${avgMood}/10</strong></div>
                 <div>😴 Schlaf: <strong>${avgSleep}/10</strong></div>
                 <div>⚡ Energie: <strong>${avgEnergy}/10</strong></div>
@@ -864,12 +864,12 @@
                 ${avgSocial ? `<div>😰 Sozialer Stress: <strong>${avgSocial}/10</strong></div>` : ''}
               </div>
             </div>
-            ${Object.keys(emotionCounts).length ? `<div style="background:#ecfdf5;padding:12px;border-radius:10px;"><div style="font-weight:700;color:#008B8B;margin-bottom:6px;">💟 Häufigste Emotionen</div><div style="font-size:12px;">${topEmotions}</div></div>` : ''}
-            ${Object.keys(copingCounts).length ? `<div style="background:#fff7ed;padding:12px;border-radius:10px;"><div style="font-weight:700;color:#008B8B;margin-bottom:6px;">🛠️ Bewältigungsstrategien</div><div style="font-size:12px;">${topCoping}</div></div>` : ''}
-            ${bullyingPct ? `<div style="background:#fef2f2;padding:12px;border-radius:10px;"><div style="font-weight:700;color:#008B8B;margin-bottom:6px;">🎯 Mobbing-Statistik</div><div style="font-size:12px;">In <strong>${bullyingPct}%</strong> der Einträge wurde Mobbing erlebt</div><div style="font-size:11px;color:#666;margin-top:4px;">${bullyingEntries.length} von ${allEntries.length} Einträgen</div></div>` : ''}
-            <div style="background:#f5f3ff;padding:12px;border-radius:10px;">
-              <div style="font-weight:700;color:#008B8B;margin-bottom:6px;">📈 Trend</div>
-              <div style="font-size:12px;">${trend ? `Letzte 7 Einträge: Ø <strong>${trend}/10</strong>` : `${allEntries.length} Einträge erfasst`}</div>
+            ${Object.keys(emotionCounts).length ? `<div style="background:#ecfdf5;padding:14px 14px 10px 14px;border-radius:12px;"><div style="font-weight:700;color:#008B8B;margin-bottom:6px;font-size:1.15em;">💟 Häufigste Emotionen</div><div style="font-size:1.1em;">${topEmotions}</div></div>` : ''}
+            ${Object.keys(copingCounts).length ? `<div style="background:#fff7ed;padding:14px 14px 10px 14px;border-radius:12px;"><div style="font-weight:700;color:#008B8B;margin-bottom:6px;font-size:1.15em;">🛠️ Bewältigungsstrategien</div><div style="font-size:1.1em;">${topCoping}</div></div>` : ''}
+            ${bullyingPct ? `<div style="background:#fef2f2;padding:14px 14px 10px 14px;border-radius:12px;"><div style="font-weight:700;color:#008B8B;margin-bottom:6px;font-size:1.15em;">🎯 Mobbing-Statistik</div><div style="font-size:1.1em;">In <strong>${bullyingPct}%</strong> der Einträge wurde Mobbing erlebt</div><div style="font-size:0.98em;color:#666;margin-top:4px;">${bullyingEntries.length} von ${allEntries.length} Einträgen</div></div>` : ''}
+            <div style="background:#f5f3ff;padding:14px 14px 10px 14px;border-radius:12px;">
+              <div style="font-weight:700;color:#008B8B;margin-bottom:6px;font-size:1.15em;">📈 Trend</div>
+              <div style="font-size:1.1em;">${trend ? `Letzte 7 Einträge: Ø <strong>${trend}/10</strong>` : `${allEntries.length} Einträge erfasst`}</div>
             </div>
           </div>
         </div>`;
