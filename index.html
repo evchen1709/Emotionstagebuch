@@ -98,22 +98,23 @@
   <style id="print-style">
     @media print {
       body, html {
-        background: pink !important;
+        background: #fff !important;
         color: #222 !important;
         font-family: 'Heebo', Arial, sans-serif !important;
         font-size: 15px !important;
-        line-height: 1.6 !important;
+        line-height: 1.7 !important;
         margin: 0 !important;
       }
       h1, h2, h3, h4, .heading {
         color: #222 !important;
         font-family: 'Caveat', cursive !important;
         font-weight: 700 !important;
-        font-size: 2.1em !important;
+        font-size: 2.2em !important;
         margin-top: 1.2em !important;
-        margin-bottom: 0.6em !important;
+        margin-bottom: 0.7em !important;
         letter-spacing: 0.01em !important;
-        text-align: center !important;
+        text-align: left !important;
+        padding-left: 0.2em;
       }
       .toskana-green, .toskana-green-bg, .gradient-header {
         color: #222 !important;
@@ -132,21 +133,30 @@
         display: inline-block !important;
       }
       .entry-card, .card {
-        border-left: 5px solid #b2dfdb !important;
+        border-left: 4px solid #b2dfdb !important;
         background: #fff !important;
         box-shadow: 0 2px 8px #e0e0e0 !important;
-        margin: 24px 0 !important;
-        padding: 20px 24px !important;
+        margin: 28px 0 18px 0 !important;
+        padding: 18px 28px !important;
         border-radius: 14px !important;
+        page-break-inside: avoid !important;
       }
-      .text-center { text-align: center !important; }
+      .text-center { text-align: left !important; }
       .text-sm, .text-xs { font-size: 15px !important; }
       /* Buttons und Steuerelemente ausblenden */
       button, input, select, textarea, .success-message, #btnInstall, #btnPDF, #btnPrint, #btnToggleAll, [onclick*="clearAllData"] {
         display: none !important;
       }
+      /* Tagebuch-Look */
+      #entriesList, .entry-card, .card {
+        border-radius: 18px !important;
+        border-left: 6px solid #b2dfdb !important;
+        background: #fcfcf7 !important;
+        box-shadow: 0 2px 12px #e0e0e0 !important;
+        margin-bottom: 24px !important;
+      }
       /* Seitenränder für A4 */
-      @page { size: A4; margin: 16mm; }
+      @page { size: A4; margin: 18mm 12mm 18mm 18mm; }
     }
   </style>
 <body class="min-h-screen p-5">
