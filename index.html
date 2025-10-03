@@ -25,6 +25,46 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
+    /* Einheitliches Design für Auswertung/Trend */
+    #analysisSection, .analysis-section, .trend-section {
+      font-family: 'Heebo', Arial, sans-serif;
+      color: #222;
+    }
+    #analysisSection h2, #analysisSection h3, .analysis-section h2, .trend-section h2, .trend-section h3 {
+      font-family: 'Caveat', cursive;
+      color: #222d38;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.5em;
+    }
+    #analysisSection strong, .analysis-section strong, .trend-section strong {
+      color: #008B8B;
+      font-weight: 700;
+    }
+    #analysisSection .chip, .analysis-section .chip, .trend-section .chip {
+      display: inline-block;
+      background: #e0f7fa;
+      color: #008B8B;
+      border-radius: 16px;
+      font-family: 'Heebo', Arial, sans-serif;
+      font-size: 15px;
+      padding: 4px 14px;
+      margin: 2px 4px 2px 0;
+      border: 1.5px solid #b2ebf2;
+      box-shadow: 0 1px 4px #b2ebf2;
+    }
+    #analysisSection, .analysis-section, .trend-section {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px #e0e0e0;
+    }
+    #analysisSection p, .analysis-section p, .trend-section p {
+      color: #222;
+      font-size: 1.08em;
+      margin-bottom: 0.5em;
+    }
     /* --- Robustes Print-Stylesheet für PDF/Druck --- */
     @media print {
       body, html {
