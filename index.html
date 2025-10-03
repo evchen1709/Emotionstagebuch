@@ -162,6 +162,18 @@
 <body class="min-h-screen p-5">
   <!-- mobile-print-hint entfernt -->
   <div class="max-w-6xl mx-auto">
+    <!-- Namensfeld & Begrüßung -->
+    <div class="flex flex-col items-center mb-4">
+      <label for="userName" class="text-sm text-gray-700 mb-1">Wie heißt du?</label>
+      <input id="userName" type="text" maxlength="20" placeholder="Dein Name" class="px-3 py-2 border-2 border-cyan-200 rounded-lg text-center text-lg font-semibold focus:outline-none focus:border-cyan-500 transition w-60 mb-2" autocomplete="off" />
+      <div id="personalGreeting" class="text-base text-cyan-800 font-medium text-center" style="display:none;"></div>
+    </div>
+    <!-- Namensfeld & Begrüßung -->
+    <div class="flex flex-col items-center mb-4">
+      <label for="userName" class="text-sm text-gray-700 mb-1">Wie heißt du?</label>
+      <input id="userName" type="text" maxlength="20" placeholder="Dein Name" class="px-3 py-2 border-2 border-cyan-200 rounded-lg text-center text-lg font-semibold focus:outline-none focus:border-cyan-500 transition w-60 mb-2" autocomplete="off" />
+      <div id="personalGreeting" class="text-base text-cyan-800 font-medium text-center" style="display:none;"></div>
+    </div>
     <!-- Info-Button mit Popup -->
     <div class="flex justify-end mb-2">
       <button id="infoBtn" aria-label="Info" class="bg-cyan-600 hover:bg-cyan-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg text-2xl" style="outline:none;">
@@ -186,9 +198,10 @@
 
     <!-- HEADER -->
     <div class="gradient-header text-white p-8 rounded-lg text-center mb-6">
-      <div class="text-5xl mb-2">🧭</div>
-      <h1 class="heading text-3xl mb-1">Interaktiver Emotionstracker</h1>
-      <p class="text-base opacity-90">Kostenfrei, ohne Registrierung. Offline nutzbar – als App auf deinem Gerät. Dieses Tool ersetzt keine Therapie. Wende dich bei großen Sorgen an Vertrauenspersonen oder Fachleute.</p>
+  <div class="text-5xl mb-2">🧭</div>
+  <h1 id="trackerTitle" class="heading text-3xl mb-1">Interaktiver Emotionstracker</h1>
+  <!-- Begrüßung wird jetzt oben angezeigt -->
+  <p id="trackerSubtitle" class="text-base opacity-90">Kostenfrei, ohne Registrierung. Offline nutzbar – als App auf deinem Gerät. Dieses Tool ersetzt keine Therapie. Wende dich bei großen Sorgen an Vertrauenspersonen oder Fachleute.</p>
     </div>
 
     <!-- FORM -->
@@ -426,6 +439,60 @@
   </div>
 
   <script src="/install.js"></script>
+  <script>
+    // Personalisierte Begrüßung oben im Tracker
+    function updateGreeting() {
+      const name = localStorage.getItem('trackerName') || '';
+      const greetingDiv = document.getElementById('personalGreeting');
+      if (name && name.length > 1) {
+        document.getElementById('trackerTitle').textContent = `${name.charAt(0).toUpperCase() + name.slice(1)}'s Emotionstracker`;
+        greetingDiv.textContent = `Hallo ${name}, schön, dass du da bist! Hier kannst du kurz festhalten, wie es dir heute ging und was dich beschäftigt hat. So behältst du den Überblick über deine Gefühle und Erlebnisse.`;
+        greetingDiv.style.display = '';
+      } else {
+        document.getElementById('trackerTitle').textContent = 'Interaktiver Emotionstracker';
+        greetingDiv.style.display = 'none';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const input = document.getElementById('userName');
+      // Vorbelegen, falls Name schon gespeichert
+      const saved = localStorage.getItem('trackerName') || '';
+      if (saved) input.value = saved;
+      updateGreeting();
+      input.addEventListener('input', function() {
+        const name = input.value.trim();
+        if (name.length > 1) {
+          localStorage.setItem('trackerName', name);
+        } else {
+          localStorage.removeItem('trackerName');
+        }
+        updateGreeting();
+      });
+    });
+  </script>
+  <script>
+    // Personalisierung: Name & Begrüßung
+    const userNameInput = document.getElementById('userName');
+    const greetingDiv = document.getElementById('personalGreeting');
+    const trackerTitle = document.getElementById('trackerTitle');
+    const trackerSubtitle = document.getElementById('trackerSubtitle');
+    function updatePersonalGreeting() {
+      const name = userNameInput.value.trim();
+      if (name.length > 0) {
+        greetingDiv.style.display = 'block';
+        greetingDiv.textContent = `${name.charAt(0).toUpperCase() + name.slice(1)}'s Emotionstracker – Hallo ${name.charAt(0).toUpperCase() + name.slice(1)}! Schön, dass du da bist. Hier kannst du schnell festhalten, wie es dir geht. Am besten abends vorm Schlafengehen – das dauert nur 2 Minuten!`;
+        trackerTitle.textContent = `${name.charAt(0).toUpperCase() + name.slice(1)}'s Emotionstracker`;
+        trackerSubtitle.textContent = 'Trage deine Gedanken und Erlebnisse ein und behalte den Überblick über deine Gefühle.';
+      } else {
+        greetingDiv.style.display = 'none';
+        trackerTitle.textContent = 'Interaktiver Emotionstracker';
+        trackerSubtitle.textContent = 'Kostenfrei, ohne Registrierung. Offline nutzbar – als App auf deinem Gerät. Dieses Tool ersetzt keine Therapie. Wende dich bei großen Sorgen an Vertrauenspersonen oder Fachleute.';
+      }
+    }
+    if(userNameInput) {
+      userNameInput.addEventListener('input', updatePersonalGreeting);
+    }
+  </script>
   <script>
     // Info-Button Popup-Logik
     document.addEventListener('DOMContentLoaded', function() {
