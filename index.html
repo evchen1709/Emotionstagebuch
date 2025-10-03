@@ -881,15 +881,26 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>${title}</title>
+        <link href='https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Heebo:wght@300;400;500;700&display=swap' rel='stylesheet'>
         <style>
           :root{color-scheme:light;}
-          body{font-family: Arial, sans-serif; background:#fff; margin:16px;}
-          .card{border-left:4px solid #008B8B; padding:10px 12px; margin:10px 0; background:#fff; border-radius:8px; page-break-inside: avoid; break-inside: avoid;}
-          .heading{color:#008B8B}
+          body{font-family:'Heebo',Arial,sans-serif; background:#fff; margin:16px; color:#222d38;}
+          h1,h2,h3,h4,.heading{font-family:'Caveat',cursive; color:#222d38; font-weight:700; letter-spacing:0.01em; margin-bottom:0.5em;}
+          h1,.heading.text-3xl{font-size:2.6em;}
+          h2,.heading.text-2xl{font-size:2em;}
+          h3,.heading.text-xl{font-size:1.5em;}
+          .card{border-left:4px solid #008B8B; padding:16px 18px; margin:16px 0; background:#fcfcf7; border-radius:14px; box-shadow:0 2px 8px #e0e0e0; page-break-inside: avoid; break-inside: avoid;}
+          .chip{display:inline-block; background:#e0f7fa; color:#008B8B; border-radius:16px; font-family:'Heebo',Arial,sans-serif; font-size:15px; padding:4px 14px; margin:2px 4px 2px 0; border:1.5px solid #b2ebf2; box-shadow:0 1px 4px #b2ebf2;}
+          strong{color:#008B8B; font-weight:700;}
+          .trend-box{background:#eef6ff;padding:12px;border-radius:10px;}
+          .emotion-box{background:#ecfdf5;padding:12px;border-radius:10px;}
+          .coping-box{background:#fff7ed;padding:12px;border-radius:10px;}
+          .bullying-box{background:#fef2f2;padding:12px;border-radius:10px;}
+          .trend7-box{background:#f5f3ff;padding:12px;border-radius:10px;}
           @page{size:A4;margin:16mm}
         </style>
       </head><body>
-        <div style="text-align:center; margin-bottom:8px; font-size:22px; color:#008B8B;">${title}</div>`;
+        <div style="text-align:center; margin-bottom:8px; font-size:2em; color:#008B8B; font-family:'Caveat',cursive; font-weight:700;">${title}</div>`;
       if (analysisBlock) html += analysisBlock;
       html += `<div style="margin-top:14px; border-top:1px solid #ccc; padding-top:10px;"><h2 class="heading">📔 Ausgewählte Einträge (${selected.length})</h2>`;
       selected.forEach(entry => {
